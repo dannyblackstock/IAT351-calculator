@@ -19,28 +19,14 @@ public class Calculator {
 
 	private static final FlowLayout LAYOUT_STYLE = new FlowLayout();
 
-	// instance variables
-
 	// window for GUI
 	private JFrame window = new JFrame("Awesome Calculator");
 
 	// add a panel so we can listen to keyboard events
 	JPanel panel = new JPanel();
 
-	// user entry area for temperature
-	// private JLabel titleLabel = new JLabel("Awesome Calculator");
+	// main input field for numbers
 	private JTextField inputField = new JTextField(TEXT_WIDTH);
-
-	// user entry area for relative humidity
-	// private JLabel humTag = new JLabel("Relative humidity (percent):");
-	// private JTextField humText = new JTextField(TEXT_WIDTH);
-
-	// entry area for humidex result
-	// private JLabel humidexTag = new JLabel("Humidex:");
-	// private JTextField humidexText = new JTextField(TEXT_WIDTH);
-
-	// run button
-	// private JButton runButton = new JButton("Run");
 
 	// create arrays of each type of button
 	private JButton[] numberButtons;
@@ -51,7 +37,6 @@ public class Calculator {
 	private Color operatorButtonColor;
 
 	// Calculator(): constructor
-	@SuppressWarnings("serial")
 	public Calculator() {
 		// configure GUI
 		window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -98,14 +83,10 @@ public class Calculator {
 		// Container c = window.getContentPane();
 		panel.setLayout(LAYOUT_STYLE);
 		panel.setLayout(LAYOUT_STYLE);
-		// c.add(titleLabel);
+		
+		// add input field
 		panel.add(inputField);
 		inputField.setEditable(false);
-
-		// c.add(humTag);
-		// c.add(humText);
-		// c.add(humidexTag);
-		// c.add(humidexText);
 
 		// c.add(runButton);
 		final NumberListener numListener = new NumberListener(inputField);
@@ -127,19 +108,15 @@ public class Calculator {
 		for (int i = 0; i < (operatorButtons.length); i++) {
 			// Add an event listener to each operator key.
 			operatorButtons[i].addActionListener(opListener);
+			
+			// change the color
 			operatorButtons[i].setForeground(operatorButtonColor);
+			
 			// Add each operator key to the GUI.
 			panel.add(operatorButtons[i]);
 			operatorButtons[i].setFocusable(false);
 
 		}
-
-		// c.getInputMap().put(KeyStroke.getKeyStroke("="), "equals");
-		// c.getActionMap().put("equals", new AbstractAction() {
-		// public void actionPerformed(ActionEvent e) {
-		// opListener.actionPerformed(e);
-		// }
-		// });
 
 		// add key listener to the JPanel so we can handle keyboard input
 		panel.addKeyListener(new KeyListener() {
@@ -157,12 +134,15 @@ public class Calculator {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				System.out.println("Pressed " + e.getKeyChar());
-
+				
+				// call the number handling function when numbers or decimal is pressed
 				for (char i = '0'; i < '9'; i++) {
 					if (e.getKeyChar() == i) {
 						numListener.doNumber(Character.toString(i));
 					}
 				}
+				
+				// handle operator keys
 				if (e.getKeyChar() == '=' || e.getKeyChar() == '\n') {
 					opListener.doOperator("=");
 				}

@@ -23,21 +23,7 @@ public class OperatorListener implements ActionListener {
 		this.numListener = numListener;
 		previousNumber = 0.0;
 	}
-	
-	public double getCurrentDisplayNumber() {
-		
-		// check if the display is not empty
-		if (!inputField.getText().isEmpty()) {
-			// get current number
-			currentNumber = Double.parseDouble(inputField.getText());
-			return currentNumber;
-		}
-		// if the display is empty, the current number is just 0
-		else {
-			return 0.0;
-		}
-	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -48,6 +34,7 @@ public class OperatorListener implements ActionListener {
 		doOperator(clickedButton.getText());
 	}
 
+	// function to handle operations
 	public void doOperator(String operator) {
 
 		// if the clear button was pressed
@@ -98,4 +85,19 @@ public class OperatorListener implements ActionListener {
 		// store as the previous number in preparation for next operation
 		previousNumber = result;
 	}
+	
+	public double getCurrentDisplayNumber() {
+		
+		// check if the display is not empty
+		if (!inputField.getText().isEmpty()) {
+			// get current number
+			currentNumber = Double.parseDouble(inputField.getText());
+			return currentNumber;
+		}
+		// if the display is empty, the current number is just 0
+		else {
+			return 0.0;
+		}
+	}
+
 }
