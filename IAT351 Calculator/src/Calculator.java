@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 public class Calculator {
 
@@ -90,8 +91,10 @@ public class Calculator {
 		c.gridwidth = 5;
 		c.weightx = 1;
 		c.weighty = 1;
+
 		panel.add(inputField, c);
 		inputField.setEditable(false);
+		inputField.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		// c.add(runButton);
 		final NumberListener numListener = new NumberListener(inputField);
@@ -194,8 +197,8 @@ public class Calculator {
 				System.out.println("Pressed " + e.getKeyChar());
 
 				// call the number handling function when numbers or decimal is
-				// pressed
-				for (char i = '0'; i < '9'; i++) {
+				// pressed. less than ':' to include the char '9'
+				for (char i = '0'; i < ':'; i++) {
 					if (e.getKeyChar() == i) {
 						numListener.doNumber(Character.toString(i));
 					}
