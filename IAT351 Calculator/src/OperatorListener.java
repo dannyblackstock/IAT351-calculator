@@ -1,8 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeListener;
 
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
@@ -75,7 +73,7 @@ public class OperatorListener implements ActionListener {
 		else {
 			result = getCurrentDisplayNumber();
 		}
-		
+
 		previousOperator = operator;
 
 		// a new number will need to be entered, so turn on the flag for the
@@ -85,9 +83,9 @@ public class OperatorListener implements ActionListener {
 		// store as the previous number in preparation for next operation
 		previousNumber = result;
 	}
-	
+
 	public double getCurrentDisplayNumber() {
-		
+
 		// check if the display is not empty
 		if (!inputField.getText().isEmpty()) {
 			// get current number

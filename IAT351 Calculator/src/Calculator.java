@@ -84,7 +84,7 @@ public class Calculator {
 		// Container c = window.getContentPane();
 		panel.setLayout(LAYOUT_STYLE);
 		panel.setLayout(LAYOUT_STYLE);
-		
+
 		// add input field
 		panel.add(inputField);
 		inputField.setEditable(false);
@@ -109,10 +109,10 @@ public class Calculator {
 		for (int i = 0; i < (operatorButtons.length); i++) {
 			// Add an event listener to each operator key.
 			operatorButtons[i].addActionListener(opListener);
-			
+
 			// change the color
 			operatorButtons[i].setForeground(operatorButtonColor);
-			
+
 			// Add each operator key to the GUI.
 			panel.add(operatorButtons[i]);
 			operatorButtons[i].setFocusable(false);
@@ -135,38 +135,34 @@ public class Calculator {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				System.out.println("Pressed " + e.getKeyChar());
-				
-				// call the number handling function when numbers or decimal is pressed
+
+				// call the number handling function when numbers or decimal is
+				// pressed
 				for (char i = '0'; i < '9'; i++) {
 					if (e.getKeyChar() == i) {
 						numListener.doNumber(Character.toString(i));
 					}
 				}
-				
-				if (e.getKeyChar() ==  '.') {
+
+				if (e.getKeyChar() == '.') {
 					numListener.doNumber(".");
 				}
-				
+
 				// handle operator keys
 				if (e.getKeyChar() == '=' || e.getKeyChar() == '\n') {
 					opListener.doOperator("=");
-				}
-				else if (e.getKeyChar() == '+') {
+				} else if (e.getKeyChar() == '+') {
 					opListener.doOperator("+");
-				}
-				else if (e.getKeyChar() == '-') {
+				} else if (e.getKeyChar() == '-') {
 					opListener.doOperator("-");
-				}
-				else if (e.getKeyChar() == '/') {
+				} else if (e.getKeyChar() == '/') {
 					opListener.doOperator("/");
-				}
-				else if (e.getKeyChar() == '*') {
+				} else if (e.getKeyChar() == '*') {
 					opListener.doOperator("*");
-				}
-				else if (e.getKeyChar() == '%') {
+				} else if (e.getKeyChar() == '%') {
 					opListener.doOperator("%");
-				}
-				else return;
+				} else
+					return;
 			}
 		});
 
