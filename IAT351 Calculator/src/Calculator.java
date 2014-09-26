@@ -53,7 +53,7 @@ public class Calculator {
 		// humText.addActionListener(this);
 
 		// set up button arrays
-		numberButtons = new JButton[10];
+		numberButtons = new JButton[11];
 		operatorButtons = new JButton[7];
 
 		// define buttons
@@ -67,6 +67,7 @@ public class Calculator {
 		numberButtons[7] = new JButton("7");
 		numberButtons[8] = new JButton("8");
 		numberButtons[9] = new JButton("9");
+		numberButtons[10] = new JButton(".");
 
 		operatorButtons[0] = new JButton("+");
 		operatorButtons[1] = new JButton("-");
@@ -140,6 +141,10 @@ public class Calculator {
 					if (e.getKeyChar() == i) {
 						numListener.doNumber(Character.toString(i));
 					}
+				}
+				
+				if (e.getKeyChar() ==  '.') {
+					numListener.doNumber(".");
 				}
 				
 				// handle operator keys

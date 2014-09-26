@@ -41,8 +41,22 @@ public class NumberListener implements ActionListener {
 		// get current string from the input
 		String currentNumber = inputField.getText();
 		
-		// append the clicked button's text to the input field's text
-		currentNumber = currentNumber + numString;
+		// if the number entered was a decimal point
+		if (numString == ".") {
+			// if the user entered a decimal point first, add a zero in front
+			if (currentNumber.isEmpty()) {
+				currentNumber = "0.";
+			}
+			// otherwise, if the current number doesn't already have a decimal, it's OK to add one
+			else if (!currentNumber.contains(".")) {
+				// append the clicked button's text to the input field's text
+				currentNumber = currentNumber + numString;
+			}
+		}
+		else {
+			// append the clicked button's text to the input field's text
+			currentNumber = currentNumber + numString;
+		}
 			
 		// change the text
 		inputField.setText(currentNumber);	
