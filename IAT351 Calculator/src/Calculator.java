@@ -67,8 +67,8 @@ public class Calculator {
 		numberButtons[10] = new JButton(".");
 
 		operatorButtons[0] = new JButton("+");
-		operatorButtons[1] = new JButton("-");
-		operatorButtons[2] = new JButton("*");
+		operatorButtons[1] = new JButton("*");
+		operatorButtons[2] = new JButton("-");
 		operatorButtons[3] = new JButton("/");
 		operatorButtons[4] = new JButton("%");
 		operatorButtons[5] = new JButton("C");
