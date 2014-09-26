@@ -25,9 +25,17 @@ public class OperatorListener implements ActionListener {
 	}
 	
 	public double getCurrentDisplayNumber() {
-		// get current number
-		currentNumber = Double.parseDouble(inputField.getText());
-		return currentNumber;
+		
+		// check if the display is not empty
+		if (!inputField.getText().isEmpty()) {
+			// get current number
+			currentNumber = Double.parseDouble(inputField.getText());
+			return currentNumber;
+		}
+		// if the display is empty, the current number is just 0
+		else {
+			return 0.0;
+		}
 	}
 	
 	@Override
