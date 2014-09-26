@@ -23,14 +23,14 @@ public class Calculator {
 
 	// window for GUI
 	private JFrame window = new JFrame("Awesome Calculator");
-	
+
 	// add a panel so we can listen to keyboard events
 	JPanel panel = new JPanel();
-	
+
 	// user entry area for temperature
 	// private JLabel titleLabel = new JLabel("Awesome Calculator");
 	private JTextField inputField = new JTextField(TEXT_WIDTH);
-	
+
 	// user entry area for relative humidity
 	// private JLabel humTag = new JLabel("Relative humidity (percent):");
 	// private JTextField humText = new JTextField(TEXT_WIDTH);
@@ -56,7 +56,7 @@ public class Calculator {
 		// configure GUI
 		window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		window.getContentPane().add(panel);
 
 		// humidexText.setEditable(false);
@@ -95,7 +95,7 @@ public class Calculator {
 		operatorButtonColor = new Color(0, 0, 255); // blue
 
 		// arrange components in GUI
-//		Container c = window.getContentPane();
+		// Container c = window.getContentPane();
 		panel.setLayout(LAYOUT_STYLE);
 		panel.setLayout(LAYOUT_STYLE);
 		// c.add(titleLabel);
@@ -110,12 +110,15 @@ public class Calculator {
 		// c.add(runButton);
 		final NumberListener numListener = new NumberListener(inputField);
 
-		final OperatorListener opListener = new OperatorListener(inputField, numListener);
+		final OperatorListener opListener = new OperatorListener(inputField,
+				numListener);
 
 		for (int i = 0; i < (numberButtons.length); i++) {
 			// Add an event listener to each number key.
 			numberButtons[i].addActionListener(numListener);
 			numberButtons[i].setForeground(numberButtonColor);
+
+			// so the focus doesn't get removed from the frame
 			numberButtons[i].setFocusable(false);
 
 			panel.add(numberButtons[i]);
@@ -131,42 +134,60 @@ public class Calculator {
 
 		}
 
-//		c.getInputMap().put(KeyStroke.getKeyStroke("="), "equals");
-//		c.getActionMap().put("equals", new AbstractAction() {
-//		    public void actionPerformed(ActionEvent e) {
-//		        opListener.actionPerformed(e);
-//		    }
-//		});
-		
+		// c.getInputMap().put(KeyStroke.getKeyStroke("="), "equals");
+		// c.getActionMap().put("equals", new AbstractAction() {
+		// public void actionPerformed(ActionEvent e) {
+		// opListener.actionPerformed(e);
+		// }
+		// });
+
 		// add key listener to the JPanel so we can handle keyboard input
-        panel.addKeyListener(new KeyListener() {
+		panel.addKeyListener(new KeyListener() {
 
-            @Override
-            public void keyTyped(KeyEvent e) {
-            	
-            }
+			@Override
+			public void keyTyped(KeyEvent e) {
 
-            @Override
-            public void keyReleased(KeyEvent e) {
-            	
-            }
+			}
 
-            @Override
-            public void keyPressed(KeyEvent e) {
-                System.out.println("Pressed " + e.getKeyChar());
-                
-                for (char i='0'; i<'9'; i++) {
-                    if (e.getKeyChar() == i) {
-                    	numListener.doNumber(Character.toString(i));
-                    }
-                }
+			@Override
+			public void keyReleased(KeyEvent e) {
 
-            }
-        });
+			}
 
-        panel.setFocusable(true);
-        panel.requestFocusInWindow();
-        
+			@Override
+			public void keyPressed(KeyEvent e) {
+				System.out.println("Pressed " + e.getKeyChar());
+
+				for (char i = '0'; i < '9'; i++) {
+					if (e.getKeyChar() == i) {
+						numListener.doNumber(Character.toString(i));
+					}
+				}
+				if (e.getKeyChar() == '=' || e.getKeyChar() == '\n') {
+					opListener.doOperator("=");
+				}
+				else if (e.getKeyChar() == '+') {
+					opListener.doOperator("+");
+				}
+				else if (e.getKeyChar() == '-') {
+					opListener.doOperator("-");
+				}
+				else if (e.getKeyChar() == '/') {
+					opListener.doOperator("/");
+				}
+				else if (e.getKeyChar() == '*') {
+					opListener.doOperator("*");
+				}
+				else if (e.getKeyChar() == '%') {
+					opListener.doOperator("%");
+				}
+				else return;
+			}
+		});
+
+		panel.setFocusable(true);
+		panel.requestFocusInWindow();
+
 		// display GUI
 		window.setVisible(true);
 	}

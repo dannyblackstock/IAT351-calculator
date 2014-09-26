@@ -23,12 +23,15 @@ public class OperatorListener implements ActionListener {
 		this.numListener = numListener;
 		previousNumber = 0.0;
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
+	
+	public double getCurrentDisplayNumber() {
 		// get current number
 		currentNumber = Double.parseDouble(inputField.getText());
+		return currentNumber;
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
 
 		// get the button clicked as a JButton object
 		JButton clickedButton = (JButton) e.getSource();
@@ -60,34 +63,26 @@ public class OperatorListener implements ActionListener {
 		if (previousOperator != null) {
 
 			if (previousOperator == "+") {
-				result = previousNumber + currentNumber;
+				result = previousNumber + getCurrentDisplayNumber();
 			} else if (previousOperator == "-") {
-				result = previousNumber - currentNumber;
+				result = previousNumber - getCurrentDisplayNumber();
 			} else if (previousOperator == "*") {
-				result = previousNumber * currentNumber;
+				result = previousNumber * getCurrentDisplayNumber();
 			} else if (previousOperator == "/") {
-				result = previousNumber / currentNumber;
+				result = previousNumber / getCurrentDisplayNumber();
 			} else if (previousOperator == "%") {
-				result = previousNumber % currentNumber;
+				result = previousNumber % getCurrentDisplayNumber();
 			}
 
 			inputField.setText(Double.toString(result));
 		}
 
 		else {
-			result = currentNumber;
+			result = getCurrentDisplayNumber();
 		}
 		
-		/* so that you can repeatedly complete the last operator by clicking the "=" button,
-		 * check if the operator button pressed was "=" 
-		 * 
-		 */
-		
-		if (operator != "=") {
-			// store as the previous operator in preparation for next operation
-			previousOperator = operator;
-		}
-		
+		previousOperator = operator;
+
 		// a new number will need to be entered, so turn on the flag for the
 		// NumberListener
 		numListener.resetNumber();
