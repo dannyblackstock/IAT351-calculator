@@ -6,6 +6,7 @@ import javax.swing.JTextField;
 
 public class OperatorListener implements ActionListener {
 
+	private CalculatorModel model;
 	private JTextField inputField;
 
 	private double previousNumber;
@@ -16,9 +17,9 @@ public class OperatorListener implements ActionListener {
 	private NumberListener numListener;
 
 	// pass in the inputField object so the content can be accessed
-	public OperatorListener(JTextField inputField, NumberListener numListener) {
+	public OperatorListener(JTextField inputField, CalculatorModel model) {
 		this.inputField = inputField;
-		this.numListener = numListener;
+		this.model = model;
 		previousNumber = 0.0;
 	}
 
@@ -38,50 +39,58 @@ public class OperatorListener implements ActionListener {
 		// if the clear button was pressed
 		if (operator == "C") {
 			// reset all variables
-			previousOperator = null;
-			currentNumber = 0.0;
-			previousNumber = 0.0;
-			result = 0.0;
+			model.setPreviousOperator(null);
+			model.setCurrentValue("");
+			model.setPreviousNumber(0.0);
+			// model.setResult = 0.0;
 
 			// clear the display
-			inputField.setText("");
+			// inputField.setText("");
 
 			// a new number will need to be entered, so turn on the flag for the
 			// NumberListener
-			numListener.resetNumber();
+			model.setStartNewNumber(true);
 			return;
 		}
+
+		String previousOperator = model.getPreviousOperator();
 
 		// if there is a previous operator stored
 		if (previousOperator != null) {
 
 			if (previousOperator == "+") {
-				result = previousNumber + getCurrentDisplayNumber();
+				model.add();
 			} else if (previousOperator == "-") {
-				result = previousNumber - getCurrentDisplayNumber();
+				model.subtract();
 			} else if (previousOperator == "*") {
-				result = previousNumber * getCurrentDisplayNumber();
+				model.multiply();
 			} else if (previousOperator == "/") {
-				result = previousNumber / getCurrentDisplayNumber();
+				model.divide();
 			} else if (previousOperator == "%") {
-				result = previousNumber % getCurrentDisplayNumber();
+				model.modulus();
 			}
-
-			inputField.setText(Double.toString(result));
 		}
 
-		else {
-			result = getCurrentDisplayNumber();
-		}
+		model.setPreviousNumber(Double.parseDouble(model.getCurrentValue()));
 
-		previousOperator = operator;
+		// else {
+		// model.setCurrentValue(model.getCurrentValue());
+		// }
+
+		model.setPreviousOperator(operator);
 
 		// a new number will need to be entered, so turn on the flag for the
 		// NumberListener
-		numListener.resetNumber();
+		model.setStartNewNumber(true);
 
-		// store as the previous number in preparation for next operation
-		previousNumber = result;
+		// if the current value is not empty
+		if (!model.getCurrentValue().isEmpty() && operator != "=") {
+			// store it as the previous number in preparation for next operation
+			model.setPreviousNumber(Double.parseDouble(model.getCurrentValue()));
+		} else {
+			// just store 0.0 as the previous number
+			model.setPreviousNumber(0.0);
+		}
 	}
 
 	public double getCurrentDisplayNumber() {

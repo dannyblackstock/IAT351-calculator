@@ -5,6 +5,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,7 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class Calculator {
+public class Calculator implements Observer {
 
 	// class constants
 	private static final int WINDOW_WIDTH = 275; // pixels
@@ -96,11 +98,15 @@ public class Calculator {
 		inputField.setEditable(false);
 		inputField.setHorizontalAlignment(SwingConstants.RIGHT);
 
+		CalculatorModel model = new CalculatorModel();
+		// add this view as an observer
+		model.addObserver(this);
+
 		// c.add(runButton);
-		final NumberListener numListener = new NumberListener(inputField);
+		final NumberListener numListener = new NumberListener(inputField, model);
 
 		final OperatorListener opListener = new OperatorListener(inputField,
-				numListener);
+				model);
 
 		for (int i = 0; i < (numberButtons.length); i++) {
 			// Add an event listener to each number key.
@@ -237,5 +243,21 @@ public class Calculator {
 	public static void main(String[] args) {
 		Calculator gui1 = new Calculator();
 		// Humidex gui2 = new Humidex();
+	}
+
+	@Override
+	public void update(Observable model, Object updateNum) {
+		String numberString;
+		
+		if (updateNum instanceof String) { 
+			numberString = (String) updateNum;
+		}
+		else {
+			Double number = (Double) updateNum;
+			numberString = Double.toString(number);
+		}
+
+		// put num on the screen
+		inputField.setText(numberString);
 	}
 }
