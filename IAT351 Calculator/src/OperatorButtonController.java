@@ -3,14 +3,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-public class NumberListener implements ActionListener {
+public class OperatorButtonController implements ActionListener {
 
 	private CalculatorModel model;
 
-	// private JTextField inputField;
-
 	// pass in the inputField object so the content can be accessed
-	public NumberListener(CalculatorModel model) {
+	public OperatorButtonController(CalculatorModel model) {
 		this.model = model;
 	}
 
@@ -20,11 +18,12 @@ public class NumberListener implements ActionListener {
 		// get the button clicked as a JButton object
 		JButton clickedButton = (JButton) e.getSource();
 
-		doNumber(clickedButton.getText());
+		// get the button's text
+		doOperator(clickedButton.getText());
 	}
 
-	public void doNumber(String buttonClickedValue) {
-		model.doNumber(buttonClickedValue);
+	// function to handle operations
+	public void doOperator(String operator) {
+		model.doOperation(operator);
 	}
-
 }

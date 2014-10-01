@@ -14,14 +14,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class Calculator implements Observer {
+public class CalculatorView implements Observer {
 
 	// class constants
 	private static final int WINDOW_WIDTH = 275; // pixels
 	private static final int WINDOW_HEIGHT = 275; // pixels
 	private static final int TEXT_WIDTH = 20; // characters
-
-	// private static final FlowLayout LAYOUT_STYLE = new FlowLayout();
 
 	// window for GUI
 	private JFrame window = new JFrame("Awesome Calculator");
@@ -41,7 +39,7 @@ public class Calculator implements Observer {
 	private Color operatorButtonColor;
 
 	// Calculator(): constructor
-	public Calculator() {
+	public CalculatorView() {
 		// configure GUI
 		window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,6 +49,17 @@ public class Calculator implements Observer {
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
+		panel.setFocusable(true);
+		panel.requestFocusInWindow();
+		
+		CalculatorModel model = new CalculatorModel();
+		// add this view as an observer
+		model.addObserver(this);
+
+		// create controllers that know about the model
+		final NumberButtonController numListener = new NumberButtonController(model);
+		final OperatorButtonController opListener = new OperatorButtonController(model);
+		
 		// set up button arrays
 		numberButtons = new JButton[11];
 		operatorButtons = new JButton[7];
@@ -79,12 +88,6 @@ public class Calculator implements Observer {
 		numberButtonColor = new Color(255, 0, 0); // red
 		operatorButtonColor = new Color(0, 0, 255); // blue
 
-		// arrange components in GUI
-		// Container c = window.getContentPane();
-		// panel.setLayout(LAYOUT_STYLE);
-		// panel.setLayout(LAYOUT_STYLE);
-		panel.setLayout(new GridBagLayout());
-
 		// add input field
 		c.gridx = 0;
 		c.gridy = 0;
@@ -98,15 +101,7 @@ public class Calculator implements Observer {
 		inputField.setEditable(false);
 		inputField.setHorizontalAlignment(SwingConstants.RIGHT);
 
-		CalculatorModel model = new CalculatorModel();
-		// add this view as an observer
-		model.addObserver(this);
-
-		// c.add(runButton);
-		final NumberListener numListener = new NumberListener(model);
-
-		final OperatorListener opListener = new OperatorListener(model);
-
+		// set up number buttons
 		for (int i = 0; i < (numberButtons.length); i++) {
 			// Add an event listener to each number key.
 			numberButtons[i].addActionListener(numListener);
@@ -116,8 +111,20 @@ public class Calculator implements Observer {
 
 			// so the focus doesn't get removed from the frame
 			numberButtons[i].setFocusable(false);
+		}
 
-			// panel.add(numberButtons[i], c);
+		// set up operator buttons
+		for (int i = 0; i < (operatorButtons.length); i++) {
+			// Add an event listener to each operator key.
+			operatorButtons[i].addActionListener(opListener);
+
+			// change the color
+			operatorButtons[i].setBackground(operatorButtonColor);
+			operatorButtons[i].setOpaque(true);
+
+			// Add each operator key to the GUI.
+			// panel.add(operatorButtons[i]);
+			operatorButtons[i].setFocusable(false);
 
 		}
 
@@ -170,20 +177,6 @@ public class Calculator implements Observer {
 		c.gridwidth = 1;
 		panel.add(numberButtons[10], c);
 
-		for (int i = 0; i < (operatorButtons.length); i++) {
-			// Add an event listener to each operator key.
-			operatorButtons[i].addActionListener(opListener);
-
-			// change the color
-			operatorButtons[i].setBackground(operatorButtonColor);
-			operatorButtons[i].setOpaque(true);
-
-			// Add each operator key to the GUI.
-			// panel.add(operatorButtons[i]);
-			operatorButtons[i].setFocusable(false);
-
-		}
-
 		// add key listener to the JPanel so we can handle keyboard input
 		panel.addKeyListener(new KeyListener() {
 
@@ -233,19 +226,16 @@ public class Calculator implements Observer {
 			}
 		});
 
-		panel.setFocusable(true);
-		panel.requestFocusInWindow();
-
 		// display GUI
 		window.setVisible(true);
 	}
 
 	// main(): application entry point
 	public static void main(String[] args) {
-		Calculator gui1 = new Calculator();
-		// Humidex gui2 = new Humidex();
+		CalculatorView gui1 = new CalculatorView();
 	}
 
+	// get updates from the model and update the input field on the screen
 	@Override
 	public void update(Observable model, Object updateNum) {
 		String numberString;
