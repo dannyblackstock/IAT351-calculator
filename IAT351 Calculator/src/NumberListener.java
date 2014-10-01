@@ -2,16 +2,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JTextField;
 
 public class NumberListener implements ActionListener {
 
 	private CalculatorModel model;
-//	private JTextField inputField;
+
+	// private JTextField inputField;
 
 	// pass in the inputField object so the content can be accessed
-	public NumberListener(JTextField inputField, CalculatorModel model) {
-//		this.inputField = inputField;
+	public NumberListener(CalculatorModel model) {
 		this.model = model;
 	}
 

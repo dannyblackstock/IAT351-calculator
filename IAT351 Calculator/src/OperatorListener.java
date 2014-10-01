@@ -2,25 +2,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JTextField;
 
 public class OperatorListener implements ActionListener {
 
 	private CalculatorModel model;
-	private JTextField inputField;
-
-	private double previousNumber;
-	private double currentNumber = 0.0;
-	private String previousOperator = null;
-	private double result;
-
-	private NumberListener numListener;
 
 	// pass in the inputField object so the content can be accessed
-	public OperatorListener(JTextField inputField, CalculatorModel model) {
-		this.inputField = inputField;
+	public OperatorListener(CalculatorModel model) {
 		this.model = model;
-		previousNumber = 0.0;
 	}
 
 	@Override
@@ -39,25 +28,52 @@ public class OperatorListener implements ActionListener {
 		// if the clear button was pressed
 		if (operator == "C") {
 			// reset all variables
-			model.setPreviousOperator(null);
-			model.setCurrentValue("");
-			model.setPreviousNumber(0.0);
-			// model.setResult = 0.0;
-
-			// clear the display
-			// inputField.setText("");
-
-			// a new number will need to be entered, so turn on the flag for the
-			// NumberListener
-			model.setStartNewNumber(true);
+			model.reset();
 			return;
 		}
 
+		// if equals was pressed before the current operator, but this operator
+		// isn't equals
+		if (model.getEqualsPressed() && operator != "=") {
+			// set the previous operator to the new (current) one, and prepare
+			// model for a new number to be entered
+			model.setPreviousOperator(operator);
+
+			// try setting the previous number to the currentValue
+			if (!model.getCurrentValue().isEmpty()) {
+				model.setPreviousNumber(Double.parseDouble(model
+						.getCurrentValue()));
+			} else {
+				model.setPreviousNumber(0.0);
+			}
+
+			model.setStartNewNumber(true);
+			model.setEqualsPressed(false);
+			return;
+		}
+
+		// save temporary variables with the model's values
 		String previousOperator = model.getPreviousOperator();
+		String currentValue = model.getCurrentValue();
+		double previousNumber = model.getPreviousNumber();
+
+		// if equals was the last pressed operator, and the user pressed equals
+		// again
+		if (model.getEqualsPressed() && operator == "=") {
+			// switch the current number with the previous number so that they
+			// are calculated by the model's functions properly
+			// since the model always does previousNumber then (operator) then
+			// currentNumber
+			model.setCurrentValue(Double.toString(previousNumber));
+			model.setPreviousNumber(Double.parseDouble(currentValue));
+		}
 
 		// if there is a previous operator stored
 		if (previousOperator != null) {
 
+			// complete the operation with the pattern
+			// previousNumber then (operator) then currentNumber
+			// see CalculatorModel
 			if (previousOperator == "+") {
 				model.add();
 			} else if (previousOperator == "-") {
@@ -71,40 +87,42 @@ public class OperatorListener implements ActionListener {
 			}
 		}
 
-		model.setPreviousNumber(Double.parseDouble(model.getCurrentValue()));
+		// if the last operator was not equals and the current one isn't either
+		if (!model.getEqualsPressed() && operator != "=") {
 
-		// else {
-		// model.setCurrentValue(model.getCurrentValue());
-		// }
+			// try to set the previous number to the current value on the screen
+			if (!model.getCurrentValue().isEmpty()) {
+				model.setPreviousNumber(Double.parseDouble(model
+						.getCurrentValue()));
+			} else {
+				model.setPreviousNumber(0.0);
+			}
 
-		model.setPreviousOperator(operator);
+			// save this operator as the previous operator
+			model.setPreviousOperator(operator);
+			// equals was not the last operator in this case
+			model.setEqualsPressed(false);
+		}
 
-		// a new number will need to be entered, so turn on the flag for the
-		// NumberListener
+		// if this is the first time in a row equals has been pressed
+		else if (!model.getEqualsPressed() && operator == "=") {
+			// save the locally saved variable that was on the screen before as
+			// the previous number so that it can be repeated if the user
+			// presses equals repeatedly
+			model.setPreviousNumber(Double.parseDouble(currentValue));
+
+			// equals was pressed now
+			model.setEqualsPressed(true);
+		}
+
+		// if equals was clicked twice in a row
+		else if (model.getEqualsPressed() && operator == "=") {
+			// change the previousNumber to the temporary saved version of it,
+			// so it can be used again
+			model.setPreviousNumber(previousNumber);
+		}
+
+		// a new number will need to be entered, so turn on the flag
 		model.setStartNewNumber(true);
-
-		// if the current value is not empty
-		if (!model.getCurrentValue().isEmpty() && operator != "=") {
-			// store it as the previous number in preparation for next operation
-			model.setPreviousNumber(Double.parseDouble(model.getCurrentValue()));
-		} else {
-			// just store 0.0 as the previous number
-			model.setPreviousNumber(0.0);
-		}
 	}
-
-	public double getCurrentDisplayNumber() {
-
-		// check if the display is not empty
-		if (!inputField.getText().isEmpty()) {
-			// get current number
-			currentNumber = Double.parseDouble(inputField.getText());
-			return currentNumber;
-		}
-		// if the display is empty, the current number is just 0
-		else {
-			return 0.0;
-		}
-	}
-
 }

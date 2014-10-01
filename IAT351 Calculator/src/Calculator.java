@@ -103,10 +103,9 @@ public class Calculator implements Observer {
 		model.addObserver(this);
 
 		// c.add(runButton);
-		final NumberListener numListener = new NumberListener(inputField, model);
+		final NumberListener numListener = new NumberListener(model);
 
-		final OperatorListener opListener = new OperatorListener(inputField,
-				model);
+		final OperatorListener opListener = new OperatorListener(model);
 
 		for (int i = 0; i < (numberButtons.length); i++) {
 			// Add an event listener to each number key.
@@ -217,10 +216,9 @@ public class Calculator implements Observer {
 				// handle operator keys
 				if (e.getKeyChar() == '=' || e.getKeyChar() == '\n') {
 					opListener.doOperator("=");
-				} else if  (e.getKeyCode() == 8 || e.getKeyCode() == 127) {
+				} else if (e.getKeyCode() == 8 || e.getKeyCode() == 127) {
 					opListener.doOperator("C");
-				}
-				else if (e.getKeyChar() == '+') {
+				} else if (e.getKeyChar() == '+') {
 					opListener.doOperator("+");
 				} else if (e.getKeyChar() == '-') {
 					opListener.doOperator("-");
@@ -251,11 +249,10 @@ public class Calculator implements Observer {
 	@Override
 	public void update(Observable model, Object updateNum) {
 		String numberString;
-		
-		if (updateNum instanceof String) { 
+
+		if (updateNum instanceof String) {
 			numberString = (String) updateNum;
-		}
-		else {
+		} else {
 			Double number = (Double) updateNum;
 			numberString = Double.toString(number);
 		}
