@@ -217,7 +217,10 @@ public class Calculator implements Observer {
 				// handle operator keys
 				if (e.getKeyChar() == '=' || e.getKeyChar() == '\n') {
 					opListener.doOperator("=");
-				} else if (e.getKeyChar() == '+') {
+				} else if  (e.getKeyCode() == 8 || e.getKeyCode() == 127) {
+					opListener.doOperator("C");
+				}
+				else if (e.getKeyChar() == '+') {
 					opListener.doOperator("+");
 				} else if (e.getKeyChar() == '-') {
 					opListener.doOperator("-");
